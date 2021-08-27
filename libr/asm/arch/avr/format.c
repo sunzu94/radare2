@@ -27,6 +27,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "format.h"
+#include "r_util.h"
 
 /* Formats a disassembled operand with its prefix (such as 'R' to indicate a register) into the
  * pointer to a C-string strOperand, which must be free'd after it has been used.
@@ -156,10 +157,45 @@ static int formatDisassembledOperand(avrDisassembleContext *context, char *strOp
 			fOptions.addressFieldWidth, context->longAddress);
 		break;
 	case OPERAND_IO_REGISTER:
-		retVal = sprintf(strOperand, "%s%02x",
-			OPERAND_PREFIX_IO_REGISTER,
-			dInstruction.operands[operandNum]);
+	{
+		char *current_register = NULL;
+		bool is_register_found = false;
+		switch (dInstruction.operands[operandNum])
+		{
+		    case 0x3d:
+		        current_register = "spl";
+		        is_register_found = true;
+		        break;
+		    case 0x3e:
+		        current_register = "sph";
+		        is_register_found = true;
+		        break;
+		    case 0x3f:
+		        current_register = "sreg";
+		        is_register_found = true;
+		        break;
+		    case 0x04:
+		        current_register = "adcl";
+		        is_register_found = true;
+		        break;
+		    case 0x05:
+		        current_register = "adch";
+		        is_register_found = true;
+		        break;
+		    default:
+		    	retVal = snprintf (strOperand, 5, "0x%x", dInstruction.operands[operandNum]);
+		        is_register_found = false;
+		        break;
+		    break;
+		}
+
+		if (is_register_found) {
+			r_str_ncpy (strOperand, current_register, sizeof (strOperand));
+		}
+
+		retVal = strlen (strOperand);
 		break;
+	}
 	case OPERAND_WORD_DATA:
 		retVal = sprintf (strOperand, "%s%0*x",
 			OPERAND_PREFIX_WORD_DATA,
