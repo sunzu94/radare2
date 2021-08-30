@@ -158,39 +158,31 @@ static int formatDisassembledOperand(avrDisassembleContext *context, char *strOp
 		break;
 	case OPERAND_IO_REGISTER:
 	{
-		char *current_register = NULL;
+		const char *current_register = NULL;
 		bool is_register_found = false;
 		switch (dInstruction.operands[operandNum])
 		{
-		    case 0x3d:
-		        current_register = "spl";
-		        is_register_found = true;
-		        break;
-		    case 0x3e:
-		        current_register = "sph";
-		        is_register_found = true;
-		        break;
-		    case 0x3f:
-		        current_register = "sreg";
-		        is_register_found = true;
-		        break;
-		    case 0x04:
-		        current_register = "adcl";
-		        is_register_found = true;
-		        break;
-		    case 0x05:
-		        current_register = "adch";
-		        is_register_found = true;
-		        break;
-		    default:
-		    	retVal = snprintf (strOperand, 5, "0x%x", dInstruction.operands[operandNum]);
-		        is_register_found = false;
-		        break;
-		    break;
+		case 0x3f:
+			current_register = "sreg";
+			is_register_found = true;
+			break;
+		case 0x04:
+			current_register = "adcl";
+			is_register_found = true;
+			break;
+		case 0x05:
+			current_register = "adch";
+			is_register_found = true;
+			break;
+		default:
+			retVal = snprintf (strOperand, 5, "0x%x", dInstruction.operands[operandNum]);
+			is_register_found = false;
+			break;
+		break;
 		}
 
 		if (is_register_found) {
-			r_str_ncpy (strOperand, current_register, sizeof (strOperand));
+			r_str_ncpy (strOperand, current_register, sizeof (current_register));
 		}
 
 		retVal = strlen (strOperand);
