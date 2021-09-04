@@ -1,9 +1,9 @@
 #include "avr_disasm.h"
 #include "format.h"
+#include "r_asm.h"
 #include <string.h>
-#include <r_types_base.h>
 
-int avr_decode (char *out, ut64 addr, cut8 *buf, int len) {
+int avr_decode (RAsm *a, char *out, ut64 addr, cut8 *buf, int len) {
 	formattingOptions opt = { 0 };
 	disassembledInstruction dins;
 	assembledInstruction ins;
@@ -20,7 +20,7 @@ int avr_decode (char *out, ut64 addr, cut8 *buf, int len) {
 
 	out[0] = 0;
 
-	if (disassembleInstruction (&context, &dins, ins)) {
+	if (disassembleInstruction (a, &context, &dins, ins)) {
 		strcpy (out, "invalid");
 		return -1;
 	}
@@ -36,16 +36,16 @@ int avr_decode (char *out, ut64 addr, cut8 *buf, int len) {
 			(buf[3]<<24) | (buf[2]<<16) | \
 			(buf[1]<<8) | (buf[0]);
 		*/
-		if (disassembleInstruction (&context, &dins, ins)) {
+		if (disassembleInstruction (a, &context, &dins, ins)) {
 			strcpy (out, "invalid");
 			return -1;
 		}
-		if (printDisassembledInstruction (&context, out, dins, opt) < 0) {
+		if (printDisassembledInstruction (a, &context, out, dins, opt) < 0) {
 			strcpy (out, "invalid");
 			return -1;
 		}
 		opsize = 4;
-	} else if (printDisassembledInstruction (&context, out, dins, opt) < 0) {
+	} else if (printDisassembledInstruction (a, &context, out, dins, opt) < 0) {
 		strcpy (out, "invalid");
 		return -1;
 	}

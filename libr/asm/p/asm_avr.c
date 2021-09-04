@@ -11,13 +11,16 @@
 #include <r_lib.h>
 #include <r_asm.h>
 
+#include <r_types_base.h>
+
 #include "../arch/avr/avr_disasm.h"
 #include "../arch/avr/avr_instructionset.h"
 #include "../arch/avr/disasm.h"
 
+
 static int disassemble(RAsm *a, RAsmOp *op, const ut8 *buf, int len) {
 	char buf_asm[32] = {0};
-	op->size = avr_decode (buf_asm, a->pc, buf, len);
+	op->size = avr_decode (a, buf_asm, a->pc, buf, len);
 	if (*buf_asm == '.') {
 		*buf_asm = 0;
 	}

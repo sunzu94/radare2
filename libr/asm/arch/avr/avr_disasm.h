@@ -28,6 +28,7 @@
 
 #include <stdint.h>
 #include "avr_instructionset.h"
+#include "r_asm.h"
 
 /* OPERAND_REGISTER_GHOST:
  * Some instructions, like clr, only have one instruction when written in assembly,
@@ -78,7 +79,7 @@ struct _avrDisassembleContext {
 typedef struct _avrDisassembleContext avrDisassembleContext;
 
 /* Disassembles an assembled instruction, including its operands. */
-int disassembleInstruction(avrDisassembleContext *context, disassembledInstruction *dInstruction, const assembledInstruction aInstruction);
+int disassembleInstruction(RAsm *a, avrDisassembleContext *context, disassembledInstruction *dInstruction, const assembledInstruction aInstruction);
 
 #endif
 

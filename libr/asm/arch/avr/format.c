@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include "format.h"
 #include "r_util.h"
+#include "avr_disasm.h"
 
 /* Formats a disassembled operand with its prefix (such as 'R' to indicate a register) into the
  * pointer to a C-string strOperand, which must be free'd after it has been used.
@@ -35,10 +36,10 @@
  * and so that the printing of the formatted operand is not hard coded into the format operand code.
  * If an addressLabelPrefix is specified in formattingOptions (option is set and string is not NULL),
  * it will print the relative branch/jump/call with this prefix and the destination address as the label. */
-static int formatDisassembledOperand(avrDisassembleContext *context, char *strOperand, int operandNum, const disassembledInstruction dInstruction, formattingOptions fOptions);
+static int formatDisassembledOperand(RAsm *a, avrDisassembleContext *context, char *strOperand, int operandNum, const disassembledInstruction dInstruction, formattingOptions fOptions);
 
 /* Prints a disassembled instruction, formatted with options set in the formattingOptions structure. */
-int printDisassembledInstruction(avrDisassembleContext *context, char *out, const disassembledInstruction dInstruction, formattingOptions fOptions) {
+int printDisassembledInstruction(RAsm *a, avrDisassembleContext *context, char *out, const disassembledInstruction dInstruction, formattingOptions fOptions) {
 	//char fmt[64];
 	int retVal, i;
 	char strOperand[256];
@@ -59,7 +60,7 @@ int printDisassembledInstruction(avrDisassembleContext *context, char *out, cons
 		if (i > 0 && i != dInstruction.instruction->numOperands)
 			strcat (out, ", ");
 		/* Format the disassembled operand into the string strOperand, and print it */
-		retVal = formatDisassembledOperand(context, strOperand, i, dInstruction, fOptions);
+		retVal = formatDisassembledOperand(a, context, strOperand, i, dInstruction, fOptions);
 		if (retVal < 0)
 			return retVal;
 		/* Print the operand and free if it's not NULL */
@@ -75,7 +76,7 @@ int printDisassembledInstruction(avrDisassembleContext *context, char *out, cons
  * and so that the printing of the formatted operand is not hard coded into the format operand code.
  * If an addressLabelPrefix is specified in formattingOptions (option is set and string is not NULL),
  * it will print the relative branch/jump/call with this prefix and the destination address as the label. */
-static int formatDisassembledOperand(avrDisassembleContext *context, char *strOperand, int operandNum, const disassembledInstruction dInstruction, formattingOptions fOptions) {
+static int formatDisassembledOperand(RAsm *a, avrDisassembleContext *context, char *strOperand, int operandNum, const disassembledInstruction dInstruction, formattingOptions fOptions) {
 	char binary[9];
 	int retVal;
 
@@ -160,25 +161,34 @@ static int formatDisassembledOperand(avrDisassembleContext *context, char *strOp
 	{
 		const char *current_register = NULL;
 		bool is_register_found = false;
-		switch (dInstruction.operands[operandNum])
+
+
+		if (dInstruction.operands[operandNum] == 0x3f)
 		{
-		case 0x3f:
 			current_register = "sreg";
 			is_register_found = true;
-			break;
-		case 0x04:
-			current_register = "adcl";
-			is_register_found = true;
-			break;
-		case 0x05:
-			current_register = "adch";
-			is_register_found = true;
-			break;
-		default:
+		}
+		else if (!strcmp (a->cpu, "ATmega328p"))
+		{
+			switch (dInstruction.operands[operandNum])
+			{
+			case 0x04:
+				current_register = "adcl";
+				is_register_found = true;
+				break;
+			case 0x05:
+				current_register = "adch";
+				is_register_found = true;
+				break;
+			default:
+				retVal = snprintf (strOperand, 5, "0x%x", dInstruction.operands[operandNum]);
+				is_register_found = false;
+				break;
+			}
+		}
+		else {
 			retVal = snprintf (strOperand, 5, "0x%x", dInstruction.operands[operandNum]);
 			is_register_found = false;
-			break;
-		break;
 		}
 
 		if (is_register_found) {

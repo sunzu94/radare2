@@ -1685,8 +1685,11 @@ INVALID_OP:
 	return NULL;
 }
 
+//TODO: remove register analysis comment when each avr cpu will be implemented in asm plugin
 static int avr_op(RAnal *anal, RAnalOp *op, ut64 addr, const ut8 *buf, int len, RAnalOpMask mask) {
 	CPU_MODEL *cpu;
+	cpu = get_cpu_model (anal->cpu);
+	/*	CPU_MODEL *cpu;
 	ut64 offset;
 	int size = -1;
 	char mnemonic[32] = {0};
@@ -1724,14 +1727,14 @@ static int avr_op(RAnal *anal, RAnalOp *op, ut64 addr, const ut8 *buf, int len, 
 
 		offset += const_get_value (const_by_name (cpu, CPU_CONST_PARAM, "eeprom_size"));
 		r_anal_esil_reg_write (anal->esil, "_page", offset);
-	}
+	}*/
 	// process opcode
 	avr_op_analyze (anal, op, addr, buf, len, cpu);
 
 	op->mnemonic = strdup (mnemonic);
 	op->size = size;
 
-	return size;
+	return -1;
 }
 
 static bool avr_custom_des(RAnalEsil *esil) {
@@ -1937,7 +1940,7 @@ static int esil_avr_fini(RAnalEsil *esil) {
 }
 
 static bool set_reg_profile(RAnal *anal) {
-	const char *p =
+	char *p =
 		"=PC	pcl\n"
 		"=SN	r24\n"
 		"=SP	sp\n"
@@ -2060,6 +2063,11 @@ RAMPX, RAMPY, RAMPZ, RAMPD and EIND:
 //		Store Program Memory Control and Status Register (SPMCSR)
 		"gpr    spmcsr  .8      64      0\n"
 		;
+
+	if (strcmp (anal->cpu, "ATmega328p") == 0)
+	{
+		//strcat (p, "gpr    eear  .16      61      0\n");
+	}
 
 	return r_reg_set_profile_string (anal->reg, p);
 }
