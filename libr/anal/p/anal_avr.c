@@ -1940,7 +1940,7 @@ static int esil_avr_fini(RAnalEsil *esil) {
 }
 
 static bool set_reg_profile(RAnal *anal) {
-	char *p =
+	char p[400000] =//ugly. I should use malloc instead
 		"=PC	pcl\n"
 		"=SN	r24\n"
 		"=SP	sp\n"
@@ -1997,6 +1997,7 @@ RAMPX, RAMPY, RAMPZ, RAMPD and EIND:
 
 // 16 bit overlapped registers for 16 bit math
 		"gpr	r1_r0	.16	0	0\n"	//this is a hack for mul
+
 		"gpr	r17_r16	.16	16	0\n"
 		"gpr	r19_r18	.16	18	0\n"
 		"gpr	r21_r20	.16	20	0\n"
@@ -2066,8 +2067,43 @@ RAMPX, RAMPY, RAMPZ, RAMPD and EIND:
 
 	if (strcmp (anal->cpu, "ATmega328p") == 0)
 	{
-		//strcat (p, "gpr    eear  .16      61      0\n");
+		strcat (p, "gpr		pinb	.16		65		0\n");
+		strcat (p, "gpr		pinb0	.16		66		0\n");
+		strcat (p, "gpr		pinb1	.16		67		0\n");
+		strcat (p, "gpr		pinb2	.16		68		0\n");
+		strcat (p, "gpr		pinb3	.16		69		0\n");
+		strcat (p, "gpr		pinb4	.16		70		0\n");
+		strcat (p, "gpr		pinb5	.16		71		0\n");
+		strcat (p, "gpr		pinb6	.16		72		0\n");
+		strcat (p, "gpr		pinb7	.16		73		0\n");
+
+		strcat (p, "gpr		pinc	.16		74		0\n");
+		strcat (p, "gpr		pind	.16		75		0\n");
+		strcat (p, "gpr		ddrb	.16		76		0\n");
+		strcat (p, "gpr		ddrc	.16		77		0\n");
+		strcat (p, "gpr		ddrd	.16		78		0\n");
+		strcat (p, "gpr		ddre	.16		79		0\n");
+		strcat (p, "gpr		portb	.16		80		0\n");
+		strcat (p, "gpr		portc	.16		81		0\n");
+
+		strcat (p, "gpr		tifr0	.16		82		0\n");
+		strcat (p, "gpr		tifr1	.16		83		0\n");
+		strcat (p, "gpr		tifr2	.16		84		0\n");
+
+		strcat (p, "gpr		pcifr	.16		85		0\n");
+		strcat (p, "gpr		eifr	.16		86		0\n");
+		strcat (p, "gpr		eimsk	.16		87		0\n");
+		strcat (p, "gpr		gpior0	.16		88		0\n");
+
+
+
+		strcat (p, "gpr		eear	.16		89		0\n");
+		strcat (p, "gpr		eecr	.16		90		0\n");
+		strcat (p, "gpr		eedr	.16		91		0\n");
+		strcat (p, "gpr		eear	.16		92		0\n");
 	}
+
+	//p = (const char *) p;
 
 	return r_reg_set_profile_string (anal->reg, p);
 }
