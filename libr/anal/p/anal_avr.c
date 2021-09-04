@@ -2077,18 +2077,90 @@ RAMPX, RAMPY, RAMPZ, RAMPD and EIND:
 		strcat (p, "gpr		pinb6	.16		72		0\n");
 		strcat (p, "gpr		pinb7	.16		73		0\n");
 
-		strcat (p, "gpr		pinc	.16		74		0\n");
-		strcat (p, "gpr		pind	.16		75		0\n");
-		strcat (p, "gpr		ddrb	.16		76		0\n");
-		strcat (p, "gpr		ddrc	.16		77		0\n");
-		strcat (p, "gpr		ddrd	.16		78		0\n");
-		strcat (p, "gpr		ddre	.16		79		0\n");
-		strcat (p, "gpr		portb	.16		80		0\n");
-		strcat (p, "gpr		portc	.16		81		0\n");
+		strcat (p, "gpr		pinc0	.16		74		0\n");
+		strcat (p, "gpr		pinc1	.16		74		0\n");
+		strcat (p, "gpr		pinc2	.16		74		0\n");
+		strcat (p, "gpr		pinc3	.16		74		0\n");
+		strcat (p, "gpr		pinc4	.16		74		0\n");
+		strcat (p, "gpr		pinc5	.16		74		0\n");
+		strcat (p, "gpr		pinc6	.16		74		0\n");
 
-		strcat (p, "gpr		tifr0	.16		82		0\n");
+
+		strcat (p, "gpr		pind	.16		75		0\n");
+		strcat (p, "gpr		ddb0	.16		76		0\n");
+		strcat (p, "gpr		ddb1	.16		76		0\n");
+		strcat (p, "gpr		ddb2	.16		76		0\n");
+		strcat (p, "gpr		ddb3	.16		76		0\n");
+		strcat (p, "gpr		ddb4	.16		76		0\n");
+		strcat (p, "gpr		ddb5	.16		76		0\n");
+		strcat (p, "gpr		ddb6	.16		76		0\n");
+		strcat (p, "gpr		ddb7	.16		76		0\n");
+
+
+		strcat (p, "gpr		ddrc	.16		77		0\n");
+		strcat (p, "gpr		ddc0	.16		77		0\n");
+		strcat (p, "gpr		ddc1	.16		77		0\n");
+		strcat (p, "gpr		ddc2	.16		77		0\n");
+		strcat (p, "gpr		ddc3	.16		77		0\n");
+		strcat (p, "gpr		ddc4	.16		77		0\n");
+		strcat (p, "gpr		ddc5	.16		77		0\n");
+		strcat (p, "gpr		ddc6	.16		77		0\n");
+
+
+
+		strcat (p, "gpr		ddrd	.16		78		0\n");
+		strcat (p, "gpr		ddc0	.16		78		0\n");
+		strcat (p, "gpr		ddc1	.16		78		0\n");
+		strcat (p, "gpr		ddc2	.16		78		0\n");
+		strcat (p, "gpr		ddc3	.16		78		0\n");
+		strcat (p, "gpr		ddc4	.16		78		0\n");
+		strcat (p, "gpr		ddc5	.16		78		0\n");
+		strcat (p, "gpr		ddc6	.16		78		0\n");
+
+		strcat (p, "gpr		portb	.16		80		0\n");
+		strcat (p, "gpr		portb0	.16		80		0\n");
+		strcat (p, "gpr		portb1	.16		80		0\n");
+		strcat (p, "gpr		portb2	.16		80		0\n");
+		strcat (p, "gpr		portb3	.16		80		0\n");
+		strcat (p, "gpr		portb4	.16		80		0\n");
+		strcat (p, "gpr		portb5	.16		80		0\n");
+		strcat (p, "gpr		portb6	.16		80		0\n");
+		strcat (p, "gpr		portb7	.16		80		0\n");
+
+
+		strcat (p, "gpr		portc	.16		80		0\n");
+		strcat (p, "gpr		portc0	.16		80		0\n");
+		strcat (p, "gpr		portc1	.16		80		0\n");
+		strcat (p, "gpr		portc2	.16		80		0\n");
+		strcat (p, "gpr		portc3	.16		80		0\n");
+		strcat (p, "gpr		portc4	.16		80		0\n");
+		strcat (p, "gpr		portc5	.16		80		0\n");
+		strcat (p, "gpr		portc6	.16		80		0\n");
+		strcat (p, "gpr		portc7	.16		80		0\n");
+
+
+		strcat (p, "gpr		portd	.16		80		0\n");
+		strcat (p, "gpr		portd0	.16		80		0\n");
+		strcat (p, "gpr		portd1	.16		80		0\n");
+		strcat (p, "gpr		portd2	.16		80		0\n");
+		strcat (p, "gpr		portd3	.16		80		0\n");
+		strcat (p, "gpr		portd4	.16		80		0\n");
+		strcat (p, "gpr		portd5	.16		80		0\n");
+		strcat (p, "gpr		portd6	.16		80		0\n");
+		strcat (p, "gpr		portd7	.16		80		0\n");
+
+
+		strcat (p, "gpr		tifr0	.8		82		0\n");
+		strcat (p, "gpr		ocf0a	.1		82		0\n");
+		strcat (p, "gpr		ocf0b	.1		82		0\n");
+
+
 		strcat (p, "gpr		tifr1	.16		83		0\n");
-		strcat (p, "gpr		tifr2	.16		84		0\n");
+		/*strcat (p, "gpr		tov1	.8		83		0\n");
+		strcat (p, "gpr		ocf1a	.8		83		0\n");
+		strcat (p, "gpr		ocf1a	.8		83		0\n");
+		strcat (p, "gpr		icf1	.8		83		0\n");*/
+		strcat (p, "gpr		tifr2	.8		84		0\n");
 
 		strcat (p, "gpr		pcifr	.16		85		0\n");
 		strcat (p, "gpr		eifr	.16		86		0\n");
@@ -2100,7 +2172,6 @@ RAMPX, RAMPY, RAMPZ, RAMPD and EIND:
 		strcat (p, "gpr		eear	.16		89		0\n");
 		strcat (p, "gpr		eecr	.16		90		0\n");
 		strcat (p, "gpr		eedr	.16		91		0\n");
-		strcat (p, "gpr		eear	.16		92		0\n");
 	}
 
 	//p = (const char *) p;
