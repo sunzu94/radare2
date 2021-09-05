@@ -2076,87 +2076,89 @@ static bool set_reg_profile(RAnal *anal) {
 	if (strcmp (anal->cpu, "ATmega328p") == 0)
 	{
 		const char *section_two =
-			"gpr		pinb	.16		65		0\n"
-			"gpr		pinb0	.16		66		0\n"
-			"gpr		pinb1	.16		67		0\n"
-			"gpr		pinb2	.16		68		0\n"
-			"gpr		pinb3	.16		69		0\n"
-			"gpr		pinb4	.16		70		0\n"
-			"gpr		pinb5	.16		71		0\n"
-			"gpr		pinb6	.16		72		0\n"
-			"gpr		pinb7	.16		73		0\n"
+			"gpr		pinb	.8		65		0\n"
+			"gpr		pinb0	.1		66		0\n"
+			"gpr		pinb1	.1		67		0\n"
+			"gpr		pinb2	.1		68		0\n"
+			"gpr		pinb3	.1		69		0\n"
+			"gpr		pinb4	.1		70		0\n"
+			"gpr		pinb5	.1		71		0\n"
+			"gpr		pinb6	.1		72		0\n"
+			"gpr		pinb7	.1		73		0\n"
 
-			"gpr		pinc0	.16		74		0\n"
-			"gpr		pinc1	.16		74		0\n"
-			"gpr		pinc2	.16		74		0\n"
-			"gpr		pinc3	.16		74		0\n"
-			"gpr		pinc4	.16		74		0\n"
-			"gpr		pinc5	.16		74		0\n"
-			"gpr		pinc6	.16		74		0\n"
-
-
-			"gpr		pind	.16		75		0\n"
-			"gpr		ddb0	.16		76		0\n"
-			"gpr		ddb1	.16		76		0\n"
-			"gpr		ddb2	.16		76		0\n"
-			"gpr		ddb3	.16		76		0\n"
-			"gpr		ddb4	.16		76		0\n"
-			"gpr		ddb5	.16		76		0\n"
-			"gpr		ddb6	.16		76		0\n"
-			"gpr		ddb7	.16		76		0\n"
+			"gpr		pinc	.8		74		0\n"
+			"gpr		pinc0	.1		74		0\n"
+			"gpr		pinc1	.1		74		0\n"
+			"gpr		pinc2	.1		74		0\n"
+			"gpr		pinc3	.1		74		0\n"
+			"gpr		pinc4	.1		74		0\n"
+			"gpr		pinc5	.1		74		0\n"
+			"gpr		pinc6	.1		74		0\n"
 
 
-			"gpr		ddrc	.16		77		0\n"
-			"gpr		ddc0	.16		77		0\n"
-			"gpr		ddc1	.16		77		0\n"
-			"gpr		ddc2	.16		77		0\n"
-			"gpr		ddc3	.16		77		0\n"
-			"gpr		ddc4	.16		77		0\n"
-			"gpr		ddc5	.16		77		0\n"
-			"gpr		ddc6	.16		77		0\n"
+			"gpr		pind	.8		75		0\n"
+			"gpr		ddrb	.8		76		0\n"
+			"gpr		ddb0	.1		76		0\n"
+			"gpr		ddb1	.1		76		0\n"
+			"gpr		ddb2	.1		76		0\n"
+			"gpr		ddb3	.1		76		0\n"
+			"gpr		ddb4	.1		76		0\n"
+			"gpr		ddb5	.1		76		0\n"
+			"gpr		ddb6	.1		76		0\n"
+			"gpr		ddb7	.1		76		0\n"
+
+
+			"gpr		ddrc	.8		77		0\n"
+			"gpr		ddc0	.1		77		0\n"
+			"gpr		ddc1	.1		77		0\n"
+			"gpr		ddc2	.1		77		0\n"
+			"gpr		ddc3	.1		77		0\n"
+			"gpr		ddc4	.1		77		0\n"
+			"gpr		ddc5	.1		77		0\n"
+			"gpr		ddc6	.1		77		0\n"
 
 
 
-			"gpr		ddrd	.16		78		0\n"
-			"gpr		ddc0	.16		78		0\n"
-			"gpr		ddc1	.16		78		0\n"
-			"gpr		ddc2	.16		78		0\n"
-			"gpr		ddc3	.16		78		0\n"
-			"gpr		ddc4	.16		78		0\n"
-			"gpr		ddc5	.16		78		0\n"
-			"gpr		ddc6	.16		78		0\n"
+			"gpr		dddd	.8		78		0\n"
+			"gpr		ddd0	.1		78		0\n"
+			"gpr		ddd1	.1		78		0\n"
+			"gpr		ddd2	.1		78		0\n"
+			"gpr		ddd3	.1		78		0\n"
+			"gpr		ddd4	.1		78		0\n"
+			"gpr		ddd5	.1		78		0\n"
+			"gpr		ddd6	.1		78		0\n"
 
-			"gpr		portb	.16		80		0\n"
-			"gpr		portb0	.16		80		0\n"
-			"gpr		portb1	.16		80		0\n"
-			"gpr		portb2	.16		80		0\n"
-			"gpr		portb3	.16		80		0\n"
-			"gpr		portb4	.16		80		0\n"
-			"gpr		portb5	.16		80		0\n"
-			"gpr		portb6	.16		80		0\n"
-			"gpr		portb7	.16		80		0\n"
-
-
-			"gpr		portc	.16		80		0\n"
-			"gpr		portc0	.16		80		0\n"
-			"gpr		portc1	.16		80		0\n"
-			"gpr		portc2	.16		80		0\n"
-			"gpr		portc3	.16		80		0\n"
-			"gpr		portc4	.16		80		0\n"
-			"gpr		portc5	.16		80		0\n"
-			"gpr		portc6	.16		80		0\n"
-			"gpr		portc7	.16		80		0\n"
+			"gpr		portb	.8		80		0\n"
+			"gpr		portb0	.1		80		0\n"
+			"gpr		portb1	.1		80		0\n"
+			"gpr		portb2	.1		80		0\n"
+			"gpr		portb3	.1		80		0\n"
+			"gpr		portb4	.1		80		0\n"
+			"gpr		portb5	.1		80		0\n"
+			"gpr		portb6	.1		80		0\n"
+			"gpr		portb7	.1		80		0\n"
 
 
-			"gpr		portd	.16		80		0\n"
-			"gpr		portd0	.16		80		0\n"
-			"gpr		portd1	.16		80		0\n"
-			"gpr		portd2	.16		80		0\n"
-			"gpr		portd3	.16		80		0\n"
-			"gpr		portd4	.16		80		0\n"
-			"gpr		portd5	.16		80		0\n"
-			"gpr		portd6	.16		80		0\n"
-			"gpr		portd7	.16		80		0\n"
+			"gpr		portc	.8		80		0\n"
+			"gpr		portc0	.1		80		0\n"
+			"gpr		portc1	.1		80		0\n"
+			"gpr		portc2	.1		80		0\n"
+			"gpr		portc3	.1		80		0\n"
+			"gpr		portc4	.1		80		0\n"
+			"gpr		portc5	.1		80		0\n"
+			"gpr		portc6	.1		80		0\n"
+			"gpr		portc7	.1		80		0\n"
+
+
+			"gpr		portd	.8		80		0\n"
+			"gpr		portd0	.1		80		0\n"
+			"gpr		portd1	.1		80		0\n"
+			"gpr		portd2	.1		80		0\n"
+			"gpr		portd3	.1		80		0\n"
+			"gpr		portd4	.1		80		0\n"
+			"gpr		portd5	.1		80		0\n"
+			"gpr		portd6	.1		80		0\n"
+			"gpr		portd7	.1		80		0\n"
 
 
 			"gpr		tifr0	.8		82		0\n"
@@ -2164,29 +2166,57 @@ static bool set_reg_profile(RAnal *anal) {
 			"gpr		ocf0b	.1		82		0\n"
 
 
-			"gpr		tifr1	.16		83		0\n"
-			"gpr		tov1	.8		83		0\n"
+			"gpr		tifr1	.8		83		0\n"
+			/*"gpr		tov1	.8		83		0\n"
 			"gpr		ocf1a	.8		83		0\n"
 			"gpr		ocf1a	.8		83		0\n"
-			"gpr		icf1	.8		83		0\n"
+			"gpr		icf1	.8		83		0\n"*/
 			"gpr		tifr2	.8		84		0\n"
 
-			"gpr		pcifr	.16		85		0\n"
-			"gpr		eifr	.16		86		0\n"
-			"gpr		eimsk	.16		87		0\n"
-			"gpr		gpior0	.16		88		0\n"
+			"gpr		pcifr	.8		85		0\n"
+			"gpr		eifr	.8		86		0\n"
+			"gpr		eimsk	.8		87		0\n"
+			"gpr		gpior0	.8		88		0\n"
 
 
 
 			"gpr		eear	.16		89		0\n"
-			"gpr		eecr	.16		90		0\n"
-			"gpr		eedr	.16		91		0\n";
+			"gpr		eearl	.8		89		0\n"
+			"gpr		eear0	.1		89		0\n"
+			"gpr		eear1	.1		89		0\n"
+			"gpr		eear2	.1		89		0\n"
+			"gpr		eear3	.1		89		0\n"
+			"gpr		eear4	.1		89		0\n"
+			"gpr		eear5	.1		89		0\n"
+			"gpr		eear6	.1		89		0\n"
+			"gpr		eear7	.1		89		0\n"
+
+			"gpr		eearh	.8		89		0\n"
+			"gpr		eear8	.1		89		0\n"
+			"gpr		eear9	.1		89		0\n"
+
+
+			"gpr		eecr	.8		90		0\n"
+			"gpr		eedr	.8		91		0\n"
+			"gpr		eedr0	.8		91		0\n"
+			"gpr		eedr1	.8		91		0\n"
+			"gpr		eedr2	.8		91		0\n"
+			"gpr		eedr3	.8		91		0\n"
+			"gpr		eedr4	.8		91		0\n"
+			"gpr		eedr5	.8		91		0\n"
+			"gpr		eedr6	.8		91		0\n"
+			"gpr		eedr7	.8		91		0\n"
+
+			//TODO: continue from here: https://github.com/vancegroup-mirrors/avr-libc/blob/06cc6ff5e6120b36f1b246871728addee58d3f87/avr-libc/include/avr/iom328p.h#L216
+			;
 
 		p = realloc(p, strlen(p) + strlen(section_two) + 1);
 		strcat(p, section_two);
 	}
 
-	return r_reg_set_profile_string (anal->reg, p);
+	int status = r_reg_set_profile_string (anal->reg, p);
+	free (p);
+	return status;
 }
 
 static int archinfo(RAnal *anal, int q) {
