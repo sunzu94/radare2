@@ -1940,26 +1940,29 @@ static int esil_avr_fini(RAnalEsil *esil) {
 }
 
 static bool set_reg_profile(RAnal *anal) {
-	char p[400000] =//ugly. I should use malloc instead
+	char *p = strdup(
 		"=PC	pcl\n"
 		"=SN	r24\n"
 		"=SP	sp\n"
 		"=BP    y\n"
 		"=RS	8\n"
-// explained in http://www.nongnu.org/avr-libc/user-manual/FAQ.html
-// and http://www.avrfreaks.net/forum/function-calling-convention-gcc-generated-assembly-file
+
+		// explained in http://www.nongnu.org/avr-libc/user-manual/FAQ.html
+		// and http://www.avrfreaks.net/forum/function-calling-convention-gcc-generated-assembly-file
 		"=A0	r25\n"
 		"=A1	r24\n"
 		"=A2	r23\n"
 		"=A3	r22\n"
 		"=R0	r24\n"
-#if 0
-PC: 16- or 22-bit program counter
-SP: 8- or 16-bit stack pointer
-SREG: 8-bit status register
-RAMPX, RAMPY, RAMPZ, RAMPD and EIND:
-#endif
-// 8bit registers x 32
+
+		/*
+		PC: 16- or 22-bit program counter
+		SP: 8- or 16-bit stack pointer
+		SREG: 8-bit status register
+		RAMPX, RAMPY, RAMPZ, RAMPD and EIND:
+		*/
+
+		// 8bit registers x 32
 		"gpr	r0	.8	0	0\n"
 		"gpr	r1	.8	1	0\n"
 		"gpr	r2	.8	2	0\n"
@@ -1995,7 +1998,7 @@ RAMPX, RAMPY, RAMPZ, RAMPD and EIND:
 		"gpr	r30	.8	30	0\n"
 		"gpr	r31	.8	31	0\n"
 
-// 16 bit overlapped registers for 16 bit math
+		// 16 bit overlapped registers for 16 bit math
 		"gpr	r1_r0	.16	0	0\n"	//this is a hack for mul
 
 		"gpr	r17_r16	.16	16	0\n"
@@ -2007,21 +2010,24 @@ RAMPX, RAMPY, RAMPZ, RAMPD and EIND:
 		"gpr	r29_r28	.16	28	0\n"
 		"gpr	r31_r30	.16	30	0\n"
 
-// 16 bit overlapped registers for memory addressing
+		// 16 bit overlapped registers for memory addressing
 		"gpr	x	.16	26	0\n"
 		"gpr	y	.16	28	0\n"
 		"gpr	z	.16	30	0\n"
-// program counter
-// NOTE: program counter size in AVR depends on the CPU model. It seems that
-// the PC may range from 16 bits to 22 bits.
+
+		// program counter
+		// NOTE: program counter size in AVR depends on the CPU model. It seems that
+		// the PC may range from 16 bits to 22 bits.
 		"gpr	pc	.32	32	0\n"
 		"gpr	pcl	.16	32	0\n"
 		"gpr	pch	.16	34	0\n"
-// special purpose registers
+
+		// special purpose registers
 		"gpr	sp	.16	36	0\n"
 		"gpr	spl	.8	36	0\n"
 		"gpr	sph	.8	37	0\n"
-// status bit register (SREG)
+
+		// status bit register (SREG)
 		"gpr	sreg	.8	38	0\n"
 		"gpr	cf	.1	38.0	0\n" // Carry. This is a borrow flag on subtracts.
 		"gpr	zf	.1	38.1	0\n" // Zero. Set to 1 when an arithmetic result is zero.
@@ -2037,144 +2043,148 @@ RAMPX, RAMPY, RAMPZ, RAMPD and EIND:
 		"gpr	rampz	.8	41	0\n"
 		"gpr	rampd	.8	42	0\n"
 		"gpr	eind	.8	43	0\n"
-// memory mapping emulator registers
-//      _prog
-//		the program flash. It has its own address space.
-//	_ram
-//	_io
-//		start of the data addres space. It is the same address of IO,
-//		because IO is the first memory space addressable in the AVR.
-//	_sram
-//		start of the SRAM (this offset depends on IO size, and it is
-//		inside the _ram address space)
-//      _eeprom
-//              this is another address space, outside ram and flash
-//      _page
-//              this is the temporary page used by the SPM instruction. This
-//              memory is not directly addressable and it is used internally by
-//              the CPU when autoflashing.
+
+		// memory mapping emulator registers
+		//      _prog
+		//		the program flash. It has its own address space.
+		//	_ram
+		//	_io
+		//		start of the data addres space. It is the same address of IO,
+		//		because IO is the first memory space addressable in the AVR.
+		//	_sram
+		//		start of the SRAM (this offset depends on IO size, and it is
+		//		inside the _ram address space)
+		//      _eeprom
+		//              this is another address space, outside ram and flash
+		//      _page
+		//              this is the temporary page used by the SPM instruction. This
+		//              memory is not directly addressable and it is used internally by
+		//              the CPU when autoflashing.
 		"gpr	_prog	.32	44	0\n"
 		"gpr    _page   .32     48	0\n"
 		"gpr	_eeprom	.32	52	0\n"
 		"gpr	_ram	.32	56	0\n"
 		"gpr	_io	.32	56	0\n"
 		"gpr	_sram	.32	60	0\n"
-// other important MCU registers
-//	spmcsr/spmcr
-//		Store Program Memory Control and Status Register (SPMCSR)
+
+		// other important MCU registers
+		//	spmcsr/spmcr
+		//		Store Program Memory Control and Status Register (SPMCSR)
 		"gpr    spmcsr  .8      64      0\n"
-		;
+	);
 
 	if (strcmp (anal->cpu, "ATmega328p") == 0)
 	{
-		strcat (p, "gpr		pinb	.16		65		0\n");
-		strcat (p, "gpr		pinb0	.16		66		0\n");
-		strcat (p, "gpr		pinb1	.16		67		0\n");
-		strcat (p, "gpr		pinb2	.16		68		0\n");
-		strcat (p, "gpr		pinb3	.16		69		0\n");
-		strcat (p, "gpr		pinb4	.16		70		0\n");
-		strcat (p, "gpr		pinb5	.16		71		0\n");
-		strcat (p, "gpr		pinb6	.16		72		0\n");
-		strcat (p, "gpr		pinb7	.16		73		0\n");
+		const char *section_two =
+			"gpr		pinb	.16		65		0\n"
+			"gpr		pinb0	.16		66		0\n"
+			"gpr		pinb1	.16		67		0\n"
+			"gpr		pinb2	.16		68		0\n"
+			"gpr		pinb3	.16		69		0\n"
+			"gpr		pinb4	.16		70		0\n"
+			"gpr		pinb5	.16		71		0\n"
+			"gpr		pinb6	.16		72		0\n"
+			"gpr		pinb7	.16		73		0\n"
 
-		strcat (p, "gpr		pinc0	.16		74		0\n");
-		strcat (p, "gpr		pinc1	.16		74		0\n");
-		strcat (p, "gpr		pinc2	.16		74		0\n");
-		strcat (p, "gpr		pinc3	.16		74		0\n");
-		strcat (p, "gpr		pinc4	.16		74		0\n");
-		strcat (p, "gpr		pinc5	.16		74		0\n");
-		strcat (p, "gpr		pinc6	.16		74		0\n");
-
-
-		strcat (p, "gpr		pind	.16		75		0\n");
-		strcat (p, "gpr		ddb0	.16		76		0\n");
-		strcat (p, "gpr		ddb1	.16		76		0\n");
-		strcat (p, "gpr		ddb2	.16		76		0\n");
-		strcat (p, "gpr		ddb3	.16		76		0\n");
-		strcat (p, "gpr		ddb4	.16		76		0\n");
-		strcat (p, "gpr		ddb5	.16		76		0\n");
-		strcat (p, "gpr		ddb6	.16		76		0\n");
-		strcat (p, "gpr		ddb7	.16		76		0\n");
+			"gpr		pinc0	.16		74		0\n"
+			"gpr		pinc1	.16		74		0\n"
+			"gpr		pinc2	.16		74		0\n"
+			"gpr		pinc3	.16		74		0\n"
+			"gpr		pinc4	.16		74		0\n"
+			"gpr		pinc5	.16		74		0\n"
+			"gpr		pinc6	.16		74		0\n"
 
 
-		strcat (p, "gpr		ddrc	.16		77		0\n");
-		strcat (p, "gpr		ddc0	.16		77		0\n");
-		strcat (p, "gpr		ddc1	.16		77		0\n");
-		strcat (p, "gpr		ddc2	.16		77		0\n");
-		strcat (p, "gpr		ddc3	.16		77		0\n");
-		strcat (p, "gpr		ddc4	.16		77		0\n");
-		strcat (p, "gpr		ddc5	.16		77		0\n");
-		strcat (p, "gpr		ddc6	.16		77		0\n");
+			"gpr		pind	.16		75		0\n"
+			"gpr		ddb0	.16		76		0\n"
+			"gpr		ddb1	.16		76		0\n"
+			"gpr		ddb2	.16		76		0\n"
+			"gpr		ddb3	.16		76		0\n"
+			"gpr		ddb4	.16		76		0\n"
+			"gpr		ddb5	.16		76		0\n"
+			"gpr		ddb6	.16		76		0\n"
+			"gpr		ddb7	.16		76		0\n"
 
 
-
-		strcat (p, "gpr		ddrd	.16		78		0\n");
-		strcat (p, "gpr		ddc0	.16		78		0\n");
-		strcat (p, "gpr		ddc1	.16		78		0\n");
-		strcat (p, "gpr		ddc2	.16		78		0\n");
-		strcat (p, "gpr		ddc3	.16		78		0\n");
-		strcat (p, "gpr		ddc4	.16		78		0\n");
-		strcat (p, "gpr		ddc5	.16		78		0\n");
-		strcat (p, "gpr		ddc6	.16		78		0\n");
-
-		strcat (p, "gpr		portb	.16		80		0\n");
-		strcat (p, "gpr		portb0	.16		80		0\n");
-		strcat (p, "gpr		portb1	.16		80		0\n");
-		strcat (p, "gpr		portb2	.16		80		0\n");
-		strcat (p, "gpr		portb3	.16		80		0\n");
-		strcat (p, "gpr		portb4	.16		80		0\n");
-		strcat (p, "gpr		portb5	.16		80		0\n");
-		strcat (p, "gpr		portb6	.16		80		0\n");
-		strcat (p, "gpr		portb7	.16		80		0\n");
-
-
-		strcat (p, "gpr		portc	.16		80		0\n");
-		strcat (p, "gpr		portc0	.16		80		0\n");
-		strcat (p, "gpr		portc1	.16		80		0\n");
-		strcat (p, "gpr		portc2	.16		80		0\n");
-		strcat (p, "gpr		portc3	.16		80		0\n");
-		strcat (p, "gpr		portc4	.16		80		0\n");
-		strcat (p, "gpr		portc5	.16		80		0\n");
-		strcat (p, "gpr		portc6	.16		80		0\n");
-		strcat (p, "gpr		portc7	.16		80		0\n");
-
-
-		strcat (p, "gpr		portd	.16		80		0\n");
-		strcat (p, "gpr		portd0	.16		80		0\n");
-		strcat (p, "gpr		portd1	.16		80		0\n");
-		strcat (p, "gpr		portd2	.16		80		0\n");
-		strcat (p, "gpr		portd3	.16		80		0\n");
-		strcat (p, "gpr		portd4	.16		80		0\n");
-		strcat (p, "gpr		portd5	.16		80		0\n");
-		strcat (p, "gpr		portd6	.16		80		0\n");
-		strcat (p, "gpr		portd7	.16		80		0\n");
-
-
-		strcat (p, "gpr		tifr0	.8		82		0\n");
-		strcat (p, "gpr		ocf0a	.1		82		0\n");
-		strcat (p, "gpr		ocf0b	.1		82		0\n");
-
-
-		strcat (p, "gpr		tifr1	.16		83		0\n");
-		/*strcat (p, "gpr		tov1	.8		83		0\n");
-		strcat (p, "gpr		ocf1a	.8		83		0\n");
-		strcat (p, "gpr		ocf1a	.8		83		0\n");
-		strcat (p, "gpr		icf1	.8		83		0\n");*/
-		strcat (p, "gpr		tifr2	.8		84		0\n");
-
-		strcat (p, "gpr		pcifr	.16		85		0\n");
-		strcat (p, "gpr		eifr	.16		86		0\n");
-		strcat (p, "gpr		eimsk	.16		87		0\n");
-		strcat (p, "gpr		gpior0	.16		88		0\n");
+			"gpr		ddrc	.16		77		0\n"
+			"gpr		ddc0	.16		77		0\n"
+			"gpr		ddc1	.16		77		0\n"
+			"gpr		ddc2	.16		77		0\n"
+			"gpr		ddc3	.16		77		0\n"
+			"gpr		ddc4	.16		77		0\n"
+			"gpr		ddc5	.16		77		0\n"
+			"gpr		ddc6	.16		77		0\n"
 
 
 
-		strcat (p, "gpr		eear	.16		89		0\n");
-		strcat (p, "gpr		eecr	.16		90		0\n");
-		strcat (p, "gpr		eedr	.16		91		0\n");
+			"gpr		ddrd	.16		78		0\n"
+			"gpr		ddc0	.16		78		0\n"
+			"gpr		ddc1	.16		78		0\n"
+			"gpr		ddc2	.16		78		0\n"
+			"gpr		ddc3	.16		78		0\n"
+			"gpr		ddc4	.16		78		0\n"
+			"gpr		ddc5	.16		78		0\n"
+			"gpr		ddc6	.16		78		0\n"
+
+			"gpr		portb	.16		80		0\n"
+			"gpr		portb0	.16		80		0\n"
+			"gpr		portb1	.16		80		0\n"
+			"gpr		portb2	.16		80		0\n"
+			"gpr		portb3	.16		80		0\n"
+			"gpr		portb4	.16		80		0\n"
+			"gpr		portb5	.16		80		0\n"
+			"gpr		portb6	.16		80		0\n"
+			"gpr		portb7	.16		80		0\n"
+
+
+			"gpr		portc	.16		80		0\n"
+			"gpr		portc0	.16		80		0\n"
+			"gpr		portc1	.16		80		0\n"
+			"gpr		portc2	.16		80		0\n"
+			"gpr		portc3	.16		80		0\n"
+			"gpr		portc4	.16		80		0\n"
+			"gpr		portc5	.16		80		0\n"
+			"gpr		portc6	.16		80		0\n"
+			"gpr		portc7	.16		80		0\n"
+
+
+			"gpr		portd	.16		80		0\n"
+			"gpr		portd0	.16		80		0\n"
+			"gpr		portd1	.16		80		0\n"
+			"gpr		portd2	.16		80		0\n"
+			"gpr		portd3	.16		80		0\n"
+			"gpr		portd4	.16		80		0\n"
+			"gpr		portd5	.16		80		0\n"
+			"gpr		portd6	.16		80		0\n"
+			"gpr		portd7	.16		80		0\n"
+
+
+			"gpr		tifr0	.8		82		0\n"
+			"gpr		ocf0a	.1		82		0\n"
+			"gpr		ocf0b	.1		82		0\n"
+
+
+			"gpr		tifr1	.16		83		0\n"
+			"gpr		tov1	.8		83		0\n"
+			"gpr		ocf1a	.8		83		0\n"
+			"gpr		ocf1a	.8		83		0\n"
+			"gpr		icf1	.8		83		0\n"
+			"gpr		tifr2	.8		84		0\n"
+
+			"gpr		pcifr	.16		85		0\n"
+			"gpr		eifr	.16		86		0\n"
+			"gpr		eimsk	.16		87		0\n"
+			"gpr		gpior0	.16		88		0\n"
+
+
+
+			"gpr		eear	.16		89		0\n"
+			"gpr		eecr	.16		90		0\n"
+			"gpr		eedr	.16		91		0\n";
+
+		p = realloc(p, strlen(p) + strlen(section_two) + 1);
+		strcat(p, section_two);
 	}
-
-	//p = (const char *) p;
 
 	return r_reg_set_profile_string (anal->reg, p);
 }
