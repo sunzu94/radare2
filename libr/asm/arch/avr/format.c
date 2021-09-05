@@ -168,31 +168,192 @@ static int formatDisassembledOperand(RAsm *a, avrDisassembleContext *context, ch
 			current_register = "sreg";
 			is_register_found = true;
 		}
-		else if (!strcmp (a->cpu, "ATmega328p"))
+
+		if (!strcmp (a->cpu, "ATmega328p"))
 		{
 			switch (dInstruction.operands[operandNum])
 			{
+			case 0x03:
+				current_register = "pinb";
+				is_register_found = true;
+				break;
 			case 0x04:
-				current_register = "adcl";
+				current_register = "ddrb";
 				is_register_found = true;
 				break;
 			case 0x05:
-				current_register = "adch";
+				current_register = "portb";
 				is_register_found = true;
 				break;
+			case 0x06:
+				current_register = "pinc";
+				is_register_found = true;
+				break;
+			case 0x07:
+				current_register = "ddrc";
+				is_register_found = true;
+				break;
+			case 0x08:
+				current_register = "portc";
+				is_register_found = true;
+				break;
+			case 0x09:
+				current_register = "pind";
+				is_register_found = true;
+				break;
+			case 0x0a:
+				current_register = "ddrd";
+				is_register_found = true;
+				break;
+			case 0x0b:
+				current_register = "portd";
+				is_register_found = true;
+				break;
+			case 0x15:
+				current_register = "tifr0";
+				is_register_found = true;
+				break;
+			case 0x016:
+				current_register = "tifr1";
+				is_register_found = true;
+				break;
+			case 0x17:
+				current_register = "tifr2";
+				is_register_found = true;
+				break;
+			case 0x1b:
+				current_register = "pcifr";
+				is_register_found = true;
+				break;
+			case 0x1c:
+				current_register = "eifr";
+				is_register_found = true;
+				break;
+			case 0x1d:
+				current_register = "eimsk";
+				is_register_found = true;
+				break;
+			case 0x1e:
+				current_register = "gpior0";
+				is_register_found = true;
+				break;
+			case 0x1f:
+				current_register = "eecr";
+				is_register_found = true;
+				break;
+			case 0x20:
+				current_register = "eedr";
+				is_register_found = true;
+				break;
+			case 0x21:
+				current_register = "eear";
+				is_register_found = true;
+				break;
+			case 0x22:
+				current_register = "eearh";
+				is_register_found = true;
+				break;
+			case 0x23:
+				current_register = "gtccr";
+				is_register_found = true;
+				break;
+			case 0x24:
+				current_register = "tccr0a";
+				is_register_found = true;
+				break;
+			case 0x25:
+				current_register = "tccr0b";
+				is_register_found = true;
+				break;
+			case 0x26:
+				current_register = "tcnt0";
+				is_register_found = true;
+				break;
+			case 0x27:
+				current_register = "otcr0a";
+				is_register_found = true;
+				break;
+			case 0x28:
+				current_register = "otcr0b";
+				is_register_found = true;
+				break;
+			case 0x2a:
+				current_register = "gpior1";
+				is_register_found = true;
+				break;
+			case 0x2b:
+				current_register = "gpior2";
+				is_register_found = true;
+				break;
+			case 0x2c:
+				current_register = "spcr";
+				is_register_found = true;
+				break;
+			case 0x2d:
+				current_register = "spsr";
+				is_register_found = true;
+				break;
+			case 0x2e:
+				current_register = "spdr";
+				is_register_found = true;
+				break;
+			case 030:
+				current_register = "acsr";
+				is_register_found = true;
+				break;
+			case 0x33:
+				current_register = "smcr";
+				is_register_found = true;
+				break;
+			case 0x34:
+				current_register = "mcusr";
+				is_register_found = true;
+				break;
+			case 0x35:
+				current_register = "mcucr";
+				is_register_found = true;
+				break;
+			case 0x37:
+				current_register = "spmcsr";
+				is_register_found = true;
+				break;
+			/*case 0x60:
+				current_register = "wdtcsr";
+				is_register_found = true;
+				break;
+			case 0x61:
+				current_register = "clkpr";
+				is_register_found = true;
+				break;
+			case 0x64:
+				current_register = "prr";
+				is_register_found = true;
+				break;
+			case 0x66:
+				current_register = "osccal";
+				is_register_found = true;
+				break;
+			case 0x68:
+				current_register = "pcicr";
+				is_register_found = true;
+				break;*/
+
+
+
 			default:
-				retVal = snprintf (strOperand, 5, "0x%x", dInstruction.operands[operandNum]);
-				is_register_found = false;
+				if (is_register_found == false) {
+					retVal = snprintf (strOperand, 5, "0x%x", dInstruction.operands[operandNum]);
+				}
 				break;
 			}
 		}
-		else {
-			retVal = snprintf (strOperand, 5, "0x%x", dInstruction.operands[operandNum]);
-			is_register_found = false;
-		}
+
 
 		if (is_register_found) {
 			r_str_ncpy (strOperand, current_register, sizeof (current_register));
+		}
+		else {
+			retVal = snprintf (strOperand, 5, "0x%x", dInstruction.operands[operandNum]);
 		}
 
 		retVal = strlen (strOperand);
