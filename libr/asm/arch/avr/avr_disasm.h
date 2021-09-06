@@ -79,7 +79,7 @@ struct _avrDisassembleContext {
 typedef struct _avrDisassembleContext avrDisassembleContext;
 
 /* Disassembles an assembled instruction, including its operands. */
-int disassembleInstruction(RAsm *a, avrDisassembleContext *context, disassembledInstruction *dInstruction, const assembledInstruction aInstruction);
+int disassembleInstruction(avrDisassembleContext *context, disassembledInstruction *dInstruction, const assembledInstruction aInstruction);
 
 #endif
 

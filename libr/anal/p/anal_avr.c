@@ -1688,22 +1688,20 @@ INVALID_OP:
 //TODO: remove register analysis comment when each avr cpu will be implemented in asm plugin
 static int avr_op(RAnal *anal, RAnalOp *op, ut64 addr, const ut8 *buf, int len, RAnalOpMask mask) {
 	CPU_MODEL *cpu;
-	cpu = get_cpu_model (anal->cpu);
-	/*	CPU_MODEL *cpu;
 	ut64 offset;
 	int size = -1;
 	char mnemonic[32] = {0};
 
 	set_invalid_op (op, addr);
 
-	size = avr_decode (mnemonic, addr, buf, len);
+	size = avr_anal (anal, mnemonic, addr, buf, len);
+
 	if (!strcmp (mnemonic, "invalid") ||
 		!strcmp (mnemonic, "truncated")) {
 		op->eob = true;
 		op->mnemonic = strdup(mnemonic);
 		return -1;
 	}
-
 	if (!op) {
 		return -1;
 	}
@@ -1727,14 +1725,14 @@ static int avr_op(RAnal *anal, RAnalOp *op, ut64 addr, const ut8 *buf, int len, 
 
 		offset += const_get_value (const_by_name (cpu, CPU_CONST_PARAM, "eeprom_size"));
 		r_anal_esil_reg_write (anal->esil, "_page", offset);
-	}*/
+	}
 	// process opcode
 	avr_op_analyze (anal, op, addr, buf, len, cpu);
 
 	op->mnemonic = strdup (mnemonic);
 	op->size = size;
 
-	return -1;
+	return size;
 }
 
 static bool avr_custom_des(RAnalEsil *esil) {

@@ -46,7 +46,7 @@ static int lookupInstruction(uint16_t opcode, int offset);
 
 
 /* Disassembles an assembled instruction, including its operands. */
-int disassembleInstruction(RAsm *a, avrDisassembleContext *context, disassembledInstruction *dInstruction, const assembledInstruction aInstruction) {
+int disassembleInstruction(avrDisassembleContext *context, disassembledInstruction *dInstruction, const assembledInstruction aInstruction) {
 	int insidx, i;
 	
 	if (!dInstruction || !context)
