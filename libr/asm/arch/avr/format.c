@@ -550,7 +550,7 @@ static int analFormatDisassembledOperand(RAnal *a, avrDisassembleContext *contex
 			break;
 		}
 
-		if (!strcmp (a->cpu, "ATmega328p"))
+		if (a->cpu && !strcmp (a->cpu, "ATmega328p"))
 		{
 			switch (dInstruction.operands[operandNum])
 			{

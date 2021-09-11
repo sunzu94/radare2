@@ -2071,7 +2071,7 @@ static bool set_reg_profile(RAnal *anal) {
 		"gpr    spmcsr  .8      64      0\n"
 	);
 
-	if (strcmp (anal->cpu, "ATmega328p") == 0)
+	if (anal->cpu && !strcmp (anal->cpu, "ATmega328p"))
 	{
 		const char *section_two =
 			"gpr		pinb	.8		65		0\n"
