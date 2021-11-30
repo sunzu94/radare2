@@ -540,12 +540,12 @@ static int analFormatDisassembledOperand(RAnal *a, avrDisassembleContext *contex
 
 		switch (dInstruction.operands[operandNum])
 		{
-		case 0x3f:
-			current_register = "sreg";
-			is_register_found = true;
-			break;
 		case 0x3d:
 			current_register = "spl";//check the architecture for spl
+			is_register_found = true;
+			break;
+		case 0x3f:
+			current_register = "sreg";
 			is_register_found = true;
 			break;
 		}
