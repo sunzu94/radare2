@@ -192,15 +192,18 @@ static int formatDisassembledOperand(RAsm *a, avrDisassembleContext *context, ch
 		const char *current_register = NULL;
 		bool is_register_found = false;
 
-
 		switch (dInstruction.operands[operandNum])
 		{
-		case 0x3f:
-			current_register = "sreg";
-			is_register_found = true;
-			break;
 		case 0x3d:
 			current_register = "spl";//check the architecture for spl
+			is_register_found = true;
+			break;
+		case 0x3e:
+			current_register = "sph";
+			is_register_found = true;
+			break;
+		case 0x3f:
+			current_register = "sreg";
 			is_register_found = true;
 			break;
 		}
@@ -537,11 +540,14 @@ static int analFormatDisassembledOperand(RAnal *a, avrDisassembleContext *contex
 		const char *current_register = NULL;
 		bool is_register_found = false;
 
-
 		switch (dInstruction.operands[operandNum])
 		{
 		case 0x3d:
 			current_register = "spl";//check the architecture for spl
+			is_register_found = true;
+			break;
+		case 0x3e:
+			current_register = "sph";
 			is_register_found = true;
 			break;
 		case 0x3f:

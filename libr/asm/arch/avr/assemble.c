@@ -156,14 +156,19 @@ int assemble_operand(RAsm *a, const char *operand, int type, uint32_t *res) {
 		*res = temp;
 		break;
 	case OPERAND_IO_REGISTER:
-	    if (strcmp (operand, "spl") == 0) {
+	    if (strcmp (operand, "spl") == 0 || strcmp (operand, "0x3d") == 0) {
 			*res = 0x3d;
 			ret = 0;
-		}
-	    else if(strcmp (operand, "sreg") == 0) {
+		} else if (strcmp (operand, "sph") == 0 || strcmp (operand, "0x3e") == 0) {
+			*res = 0x3e;
+			ret = 0;
+		} else if(strcmp (operand, "sreg") == 0 || strcmp (operand, "0x3f") == 0) {
 			*res = 0x3f;
 			ret = 0;
-		}
+		}/* else {
+			*res = getnum(a, operand); // return pure number
+			ret = 0;
+		}*/
 		break;
 	case OPERAND_BIT:
 	case OPERAND_DES_ROUND:
