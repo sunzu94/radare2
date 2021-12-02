@@ -1938,7 +1938,7 @@ static int esil_avr_fini(RAnalEsil *esil) {
 }
 
 static bool set_reg_profile(RAnal *anal) {
-	char *p = strdup(
+	char *registers_profile = strdup(
 		"=PC	pcl\n"
 		"=SN	r24\n"
 		"=SP	sp\n"
@@ -2283,13 +2283,13 @@ static bool set_reg_profile(RAnal *anal) {
 			"gpr		ubrr0l	.8		90		0\n"
 			"gpr		ubrr0l	.8		90		0\n"
 			;
-
-		p = realloc(p, strlen(p) + strlen(section_two) + 1);
-		strcat(p, section_two);
+		RStrBuf *registers_profile_buffer = r_strbuf_new(registers_profile);
+		r_strbuf_append_n (registers_profile_buffer, section_two, strlen(registers_profile) + strlen(section_two) + 1);
+		registers_profile = registers_profile_buffer->buf;
 	}
 
-	int status = r_reg_set_profile_string (anal->reg, p);
-	free (p);
+	int status = r_reg_set_profile_string (anal->reg, registers_profile);
+	free (registers_profile);
 	return status;
 }
 
