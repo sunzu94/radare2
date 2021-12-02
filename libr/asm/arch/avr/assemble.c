@@ -121,6 +121,7 @@ int assemble_operand(RAsm *a, const char *operand, int type, uint32_t *res) {
 	int ret = -1;
 	int temp;
 
+
 	switch (type) {
 	case OPERAND_REGISTER_EVEN_PAIR:
 		*res = parse_registerpair(operand);
@@ -155,6 +156,15 @@ int assemble_operand(RAsm *a, const char *operand, int type, uint32_t *res) {
 		*res = temp;
 		break;
 	case OPERAND_IO_REGISTER:
+	    if (strcmp (operand, "spl") == 0) {
+			*res = 0x3d;
+			ret = 0;
+		}
+	    else if(strcmp (operand, "sreg") == 0) {
+			*res = 0x3f;
+			ret = 0;
+		}
+		break;
 	case OPERAND_BIT:
 	case OPERAND_DES_ROUND:
 	case OPERAND_LONG_ABSOLUTE_ADDRESS:

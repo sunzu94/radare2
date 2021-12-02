@@ -31,8 +31,7 @@ static int disassemble(RAsm *a, RAsmOp *op, const ut8 *buf, int len) {
 }
 
 static int assemble(RAsm *a, RAsmOp *ao, const char *str) {
-	char opcodes[32] = {0};
-    size_t size = avr_encode(a, ao, opcodes);
+    size_t size = avr_encode(a, ao, str);
     return size;
 }
 
