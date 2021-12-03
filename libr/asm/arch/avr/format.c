@@ -387,15 +387,12 @@ static int formatDisassembledOperand(RAsm *a, avrDisassembleContext *context, ch
 			}
 		}
 
-
 		if (is_register_found == true) {
-			r_str_ncpy (strOperand, current_register, sizeof (current_register));
+			retVal = r_str_ncpy (strOperand, current_register, sizeof (current_register));
 		}
 		else {
 			retVal = snprintf (strOperand, 5, "0x%x", dInstruction.operands[operandNum]);
 		}
-
-		retVal = strlen (strOperand);
 		break;
 	}
 	case OPERAND_WORD_DATA:
