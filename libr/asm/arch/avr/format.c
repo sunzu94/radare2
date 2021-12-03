@@ -388,7 +388,7 @@ static int formatDisassembledOperand(RAsm *a, avrDisassembleContext *context, ch
 		}
 
 
-		if (is_register_found) {
+		if (is_register_found == true) {
 			r_str_ncpy (strOperand, current_register, sizeof (current_register));
 		}
 		else {
