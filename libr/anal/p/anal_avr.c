@@ -2071,8 +2071,7 @@ static bool set_reg_profile(RAnal *anal) {
 		"gpr    spmcsr  .8      64      0\n"
 	);
 
-	if (strcmp (r_str_get (anal->cpu), "ATmega328p") == 0)
-	{
+	if (!strcmp (r_str_get (anal->cpu), "ATmega328p")) {
 		const char *section_two =
 			"gpr		pinb	.8		65		0\n"
 			"gpr		pinb0	.8		66		0\n"
@@ -2283,9 +2282,9 @@ static bool set_reg_profile(RAnal *anal) {
 			"gpr		ubrr0l	.8		90		0\n"
 			"gpr		ubrr0l	.8		90		0\n"
 			;
-		RStrBuf *registers_profile_buffer = r_strbuf_new(registers_profile);
-		r_strbuf_append_n (registers_profile_buffer, section_two, strlen(registers_profile) + strlen(section_two) + 1);
-		registers_profile = registers_profile_buffer->buf;
+		RStrBuf *registers_profile_buffer = r_strbuf_new (registers_profile);
+		r_strbuf_append (registers_profile_buffer, section_two);
+		registers_profile = r_strbuf_drain (registers_profile_buffer);
 	}
 
 	int status = r_reg_set_profile_string (anal->reg, registers_profile);
@@ -2365,7 +2364,7 @@ RAnalPlugin r_anal_plugin_avr = {
 	.set_reg_profile = &set_reg_profile,
 	.esil_init = esil_avr_init,
 	.esil_fini = esil_avr_fini,
-	.anal_mask = anal_mask_avr,
+	.anal_mask = anal_mask_avr
 };
 
 #ifndef R2_PLUGIN_INCORE

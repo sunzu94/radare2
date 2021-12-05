@@ -376,14 +376,34 @@ static int formatDisassembledOperand(RAsm *a, avrDisassembleContext *context, ch
 				current_register = "pcicr";
 				is_register_found = true;
 				break;*/
-
-
-
 			default:
 				if (is_register_found == false) {
 					retVal = snprintf (strOperand, 5, "0x%x", dInstruction.operands[operandNum]);
 				}
 				break;
+			}
+		}
+		if (!strcmp (r_str_get (a->cpu), "AT90S1200")) {
+			switch (dInstruction.operands[operandNum])
+			{
+			case 0x08:
+				current_register = "acsr";
+			   	is_register_found = true;
+			    break;
+			case 0x10:
+			    current_register = "pind";
+			    is_register_found = true;
+			    break;
+			case 0x11:
+			    current_register = "ddrd";
+			    is_register_found = true;
+			    break;
+			case 0x12:
+			    current_register = "portd";
+			    is_register_found = true;
+			    break;
+			default:
+			    break;
 			}
 		}
 

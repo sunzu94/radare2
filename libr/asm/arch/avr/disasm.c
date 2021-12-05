@@ -21,7 +21,6 @@ int avr_decode (RAsm *a, char *out, ut64 addr, cut8 *buf, int len) {
 	out[0] = 0;
 
 	if (disassembleInstruction (&context, &dins, ins)) {
-		strcpy (out, "invalid");
 		return -1;
 	}
 	if (context.status > 0) {
@@ -37,20 +36,17 @@ int avr_decode (RAsm *a, char *out, ut64 addr, cut8 *buf, int len) {
 			(buf[1]<<8) | (buf[0]);
 		*/
 		if (disassembleInstruction (&context, &dins, ins)) {
-			strcpy (out, "invalid");
 			return -1;
 		}
 		if (printDisassembledInstruction (a, &context, out, dins, opt) < 0) {
-			strcpy (out, "invalid");
 			return -1;
 		}
 		opsize = 4;
 	} else if (printDisassembledInstruction (a, &context, out, dins, opt) < 0) {
-		strcpy (out, "invalid");
 		return -1;
 	}
 	if (out[0] == '.' || !out[0]) {
-		strcpy (out, "invalid");
+		return -1;
 	}
 	return opsize;
 }

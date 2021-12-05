@@ -26,7 +26,11 @@ static int disassemble(RAsm *a, RAsmOp *op, const ut8 *buf, int len) {
 	if (*buf_asm == '.') {
 		*buf_asm = 0;
 	}
-	r_strbuf_set (&op->buf_asm, buf_asm);
+	if (op->size >= 0) {
+    	r_strbuf_set (&op->buf_asm, buf_asm);
+	}  else{
+		r_strbuf_set (&op->buf_asm, "invalid");
+	}
 	return op->size;
 }
 

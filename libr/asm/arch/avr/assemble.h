@@ -5,8 +5,8 @@
  *      Author: gogo
  */
 
-#ifndef LIBR_ASM_ARCH_AVR_ASSEMBLE_H_
-#define LIBR_ASM_ARCH_AVR_ASSEMBLE_H_
+#ifndef LIBR_ASM_ARCH_AVR_ASSEMBLE_H
+#define LIBR_ASM_ARCH_AVR_ASSEMBLE_H
 
 #define MAX_TOKEN_SIZE 32
 #define TOKEN_DELIM " ,\t"
@@ -17,6 +17,8 @@ uint16_t packDataByMask(uint16_t data, uint16_t mask);
 int search_instruction(RAsm *a, char instr[3][MAX_TOKEN_SIZE], int args);
 int parse_specialreg(const char *reg);
 int getnum(RAsm *a, const char *s);
+
+int assemble_general_io_operand(const char *operand, uint32_t *res);
 
 
 #endif /* LIBR_ASM_ARCH_AVR_ASSEMBLE_H_ */

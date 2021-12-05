@@ -24,7 +24,7 @@ specialregs RegsTable[REGS_TABLE] = {
 };
 
 
-int avr_encode (RAsm *a, RAsmOp *ao, const char *str) {
+int avr_encode(RAsm *a, RAsmOp *ao, const char *str) {
 	char tokens[3][MAX_TOKEN_SIZE];
 	char *token;
 	uint32_t coded = 0;
@@ -121,7 +121,6 @@ int assemble_operand(RAsm *a, const char *operand, int type, uint32_t *res) {
 	int ret = -1;
 	int temp;
 
-
 	switch (type) {
 	case OPERAND_REGISTER_EVEN_PAIR:
 		*res = parse_registerpair(operand);
@@ -156,19 +155,8 @@ int assemble_operand(RAsm *a, const char *operand, int type, uint32_t *res) {
 		*res = temp;
 		break;
 	case OPERAND_IO_REGISTER:
-	    if (strcmp (operand, "spl") == 0 || strcmp (operand, "0x3d") == 0) {
-			*res = 0x3d;
-			ret = 0;
-		} else if (strcmp (operand, "sph") == 0 || strcmp (operand, "0x3e") == 0) {
-			*res = 0x3e;
-			ret = 0;
-		} else if(strcmp (operand, "sreg") == 0 || strcmp (operand, "0x3f") == 0) {
-			*res = 0x3f;
-			ret = 0;
-		}/* else {
-			*res = getnum(a, operand); // return pure number
-			ret = 0;
-		}*/
+		assemble_general_io_operand (operand, res);
+		ret = 0;
 		break;
 	case OPERAND_BIT:
 	case OPERAND_DES_ROUND:
@@ -363,6 +351,43 @@ int getnum(RAsm *a, const char *s) {
 	if (*s == '$') {
 		s++;
 	}
-	return r_num_math (a->num, s);
+	return sdb_atoi (s);
+}
+
+int assemble_general_io_operand(const char *operand, uint32_t *res) {
+	/*@
+		 requires strcmp (operand, "spl") == 0 || strcmp (operand, "0x3d") == 0 ||
+		 strcmp (operand, "sph") == 0 || strcmp (operand, "0x3e") == 0 ||
+		 strcmp (operand, "sreg") == 0 || strcmp (operand, "0x3f") == 0
+
+		 behavior case_spl
+		     assumes strcmp (operand, "spl") == 0 || strcmp (operand, "0x3d") == 0
+		     ensure *res == 0x3d
+		 behavior case_sph
+		     assumes strcmp (operand, "sph") == 0 || strcmp (operand, "0x3e") == 0
+		     ensure *res == 0x3d
+		 behavior case_sreg
+		     assumes strcmp (operand, "sreg") == 0 || strcmp (operand, "0x3f") == 0
+		     ensure *res == 0x3d
+
+		 complete behaviors;
+	     disjoint behaviors;
+	*/
+	int ret = -1;
+	if (strcmp (operand, "spl") == 0 || strcmp (operand, "0x3d") == 0) {
+		*res = 0x3d;
+		ret = 0;
+	} else if (strcmp (operand, "sph") == 0 || strcmp (operand, "0x3e") == 0) {
+		*res = 0x3e;
+		ret = 0;
+	} else if(strcmp (operand, "sreg") == 0 || strcmp (operand, "0x3f") == 0) {
+		*res = 0x3f;
+		ret = 0;
+	}/* else {
+		*res = getnum(a, operand); // return pure number
+		ret = 0;
+	}*/
+
+	return ret;
 }
 
